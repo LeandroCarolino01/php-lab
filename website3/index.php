@@ -1,7 +1,30 @@
 <?php
-
+    //message vars
+    $msg = '';
+    $msgClass = '';
     if(filter_has_var(INPUT_POST, 'submit')){
-        echo 'Submitted';
+
+        // to test if submitted
+        //echo 'Submitted';
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $message = $_POST['message'];
+
+        //check required fields
+        if(!empty($email) && !empty($name) && !empty($message)){
+            //echo 'Passed';
+            if(filter_var($email, FILTER_VALIDATE_EMAIL) === false){
+                //failed
+                $msg = 'Please a valid email';
+                $msgClass = 'alert-danger';
+            } else {
+                //passed
+                echo 'passed';
+            }
+        } else {
+            $msg = 'Please fill in all fields';
+            $msgClass = 'alert-danger';
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -20,6 +43,11 @@
     </nav>
 
     <div class="container">
+        <?php if($msg != ''): ?>
+            <div class="alert <?php echo $msgClass; ?>"><?php echo $msg; ?></div>
+        <?php endif; ?>
+            
+            
         <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
             <div class="form-group">
                 <label for="">Name</label>
@@ -31,7 +59,7 @@
             </div>
             <div class="form-group">
                 <label for="">Messaage</label>
-                <input type="text" name="message" class="form-control" value="">
+                <textarea name="message"  class="form-control"></textarea>
             </div>
             <br>
             <button type="submit" name="submit" class="btn btn-primary">Submit</button>
